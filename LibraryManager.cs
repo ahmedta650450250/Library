@@ -12,10 +12,10 @@ public class LibraryManager
     private readonly ILibraryRepository _repository;
     private readonly BorrowingService _borrowingservice;
     
-    public LibraryManager(ILibraryRepository repository)
+    public LibraryManager(ILibraryRepository repository, ILogger logger)
     {
         _repository = repository;
-        _borrowingservice = new BorrowingService(_repository);
+        _borrowingservice = new BorrowingService(_repository, logger);
     }
     public List<Book> Books => _repository.Books;
     public List<Admin> LoggedInAdmins => _repository.Admins;

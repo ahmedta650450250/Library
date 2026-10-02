@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -7,38 +8,83 @@ namespace Library;
 public class BorrowingService
 {
     private ILibraryRepository _repository;
-    public BorrowingService(ILibraryRepository repository)
+    private ILogger _logger;
+    public BorrowingService(ILibraryRepository repository, ILogger logger)
     {
         _repository = repository;
+        _logger = logger;
     }
 
-    
+
+
+
+        
+
+    public BorrowResult FailBorrow(string logMessage, string userMessage)
+    {
+       _logger.Warn(logMessage);
+       return new BorrowResult { Success = false, Message = userMessage};
+    }
+    public ReturnResult FailReturn(string logMessage, string userMessage)
+    {
+       _logger.Warn(logMessage);
+       return new ReturnResult { Success = false, Message = userMessage};
+    }
     public BorrowResult Borrow(User user, Book book)
     {
 
-        if (!IsLoggedIn(user))
-            return new BorrowResult { Success = false, Message = "User is not logged in"};
 
-        if (!IsAvailable(book))
-            return new BorrowResult { Success = false, Message = "Book is not available"};
+      
+
+        if (!IsLoggedIn(user))
+        { 
+            return FailBorrow($"User {user.Name} is not logged in", "User is not logged in");
+        } // i need to complate replace below in FailBorrow()
+
+        var b = _repository.Books.FirstOrDefault(x => x.ISBN == book.ISBN);
+        if (b == null)
+        { 
+            return FailBorrow($"book {book.Title} is not found", "Book is not found");
+      
+        }  
 
         if (IsBlocked(user))
-            return new BorrowResult { Success = false, Message = "user is blocked"};
-
+        { 
+            return FailBorrow($"User {user.Name} is blocked", "User is blocked");
+        
+        }
         if (HasOverdueBook(user))
-            return new BorrowResult { Success = false, Message = "the user has overdue book"};
+        { 
+            return FailBorrow($"User {user.Name} has overdue book", "the user has overdue book");
+        }
+      
+        if (b.AvailableCopies <= 0)
+        { 
+            return FailBorrow($"book {book.Title} book is not available", "Book is not available");
+            
+        }
+        
+
+
+        
+
+        
+        
+        
+
+
+      
 
 
 
         int limit = user.Type == UserType.VIP ? 10 : 3;
         if (user.BorrowedBooks.Count >= limit)
         {
-            
-            return new BorrowResult { Success = false, Message = $"Limit reached for {user.Type} users ({limit})"};
+            return FailBorrow($"limit reached for User {user.Name}", $"Limit reached for {user.Type} users ({limit})");
+        
         } 
-        var b = _repository.Books.FirstOrDefault(x => x.ISBN == book.ISBN);
-        if (b == null)
-            return new BorrowResult { Success = false, Message = "Book is not found" };
+        
+        
         b.AvailableCopies--;
         
         var record = new BorrowRecord
@@ -47,11 +93,11 @@ public class BorrowingService
             BorrowDate = DateTime.Now,
             DueDate = DateTime.Now.AddDays(14)
         };
-        user.BorrowedBooks.Add(record);
-        
-        return new BorrowResult { Success = true, Message = "Borrowed Successfully"};
 
-        
+        user.BorrowedBooks.Add(record);
+
+        _logger.Info($"User {user.Name} borrowed book {b.Title}");
+        return new BorrowResult { Success = true, Message = "Borrowed Successfully"};
         
     }
 
@@ -123,18 +169,20 @@ public class BorrowingService
     public ReturnResult ReturnBook(User user, Book book)
     {
         if (!IsLoggedIn(user))
-            return new ReturnResult { Success = false, Message = "user is not logged in"};
-
+        { 
+            return FailReturn($"user is not logged in", "user is not logged in");
+        }
         var u = _repository.GetLoggedUserByName(user.Name);
         var b = _repository.GetBookByIsbn(book.ISBN);
 
         if (b == null)
-            return new ReturnResult { Success = false, Message = "there is no book like this"};
-
+        { 
+            return FailReturn($"There is no book like this", "there is no book like this");
+        }
         var record = u.BorrowedBooks.FirstOrDefault(x => x.Book.ISBN == b.ISBN); 
         if (record == null)
         {    
-            return new ReturnResult { Success = false, Message = "book is not borrowed by this user"};
+            return FailReturn($"User has not borrowed this book b.Name", "book is not borrowed by this user");
         }
         
         u.BorrowedBooks.Remove(record);    
@@ -154,7 +202,7 @@ public class BorrowingService
         Console.WriteLine($"Fine: ${fine:F2}");
         Console.WriteLine("----------------------");
         */
-        
+        _logger.Info($"{u.Name} returned {b.Title}, Fine: {fine:F2}");
         return new ReturnResult { Success = true, Message = "Book returnes successfully", Fine = fine };
         
     }

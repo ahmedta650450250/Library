@@ -1,0 +1,15 @@
+/public/solutions/Library/obj/Debug/net9.0/Library.GeneratedMSBuildEditorConfig.editorconfig
+/public/solutions/Library/obj/Debug/net9.0/Library.AssemblyInfoInputs.cache
+/public/solutions/Library/obj/Debug/net9.0/Library.AssemblyInfo.cs
+/public/solutions/Library/obj/Debug/net9.0/Library.csproj.CoreCompileInputs.cache
+/public/solutions/Library/obj/Debug/net9.0/Library.sourcelink.json
+/public/solutions/Library/bin/Debug/net9.0/Library
+/public/solutions/Library/bin/Debug/net9.0/Library.deps.json
+/public/solutions/Library/bin/Debug/net9.0/Library.runtimeconfig.json
+/public/solutions/Library/bin/Debug/net9.0/Library.dll
+/public/solutions/Library/bin/Debug/net9.0/Library.pdb
+/public/solutions/Library/obj/Debug/net9.0/Library.dll
+/public/solutions/Library/obj/Debug/net9.0/refint/Library.dll
+/public/solutions/Library/obj/Debug/net9.0/Library.pdb
+/public/solutions/Library/obj/Debug/net9.0/Library.genruntimeconfig.cache
+/public/solutions/Library/obj/Debug/net9.0/ref/Library.dll

@@ -1,33 +1,76 @@
-﻿namespace Library;
+namespace Library;
+using System;
+using System.IO;
+using System.Linq;
 
 class Program
-{
-    static void Main(string[] args)
+{   
+    static void test1()
     {
         var repo = new FakeLibraryRepository();
-        var manager = new LibraryManager (repo);
-        repo.Books.Add(new Book ( "DoNotQuit", "ahmed","787436"));
-        repo.Books.Add(new Book ( "CleanCode", "David","59908"));
+        var logger = new ConsoleLogger();
         
-        var b = repo.GetBookByIsbn("787436");
-        
+        var manager = new LibraryManager(repo, logger);
+
         var u = new User ("jawad", UserType.Regular);
+
         manager.Login(u);
-        var result = manager.Borrow(u, b);
-        if(result.Success == true)
-        Console.WriteLine($"{result.Message}");
-        else Console.WriteLine($"{result.Message}");
-        
-        // this was a successful borrowing
-        //Next step: Making the user has over due book, then if he allowed to borrow another one
-        
-        var record = u.BorrowedBooks.FirstOrDefault(x => x.Book.ISBN == "787436");
-        record.BorrowDate = DateTime.Now.AddDays(-20);
-        record.DueDate = DateTime.Now.AddDays(-15);
-        
-        var result2 = manager.Borrow(u, b);
-        if(result2.Success == true)
-        Console.WriteLine($"Second Borrow Result: {result2.Message}");
-        else Console.WriteLine($" Second Borrow Result {result2.Message}");
+      
+        if (repo.Users.Any(u => u.Name == "jawad"))
+          Console.WriteLine("Test 1 PASS");
+        else
+          Console.WriteLine("Test 1 FAIL");
     }
+
+    static void test2()
+    {
+        var repo = new FakeLibraryRepository();
+        var logger = new ConsoleLogger();
+        
+        var manager = new LibraryManager(repo, logger);
+
+        var u = new User ("jawad", UserType.Regular);
+
+        var b = new Book ( "DoNotQuit", "ahmed","787436");
+        
+        repo.Books.Add(b);
+
+        var r = manager.Borrow(u, b);
+      
+        
+         // Console.WriteLine(r.Message);
+        
+          
+    }
+
+    
+
+
+  
+    static void Main(string[] args)
+    {
+
+        
+    var repo = new FakeLibraryRepository();
+    var logger = new MemoryLogger();
+    var manager = new LibraryManager(repo, logger);  
+    var u = new User("fayez", UserType.Regular);  
+    var b = new Book("david wilson", "woods story", "555");
+    repo.Books.Add(b);
+      
+      
+    manager.Login(u);
+    manager.Borrow(u,b);
+    manager.ReturnBook(u, b);
+
+
+  //  foreach (var e in logger.Messages) Console.WriteLine(e);
+      
+    // if(File.Exists("log.txt"))    
+     //  Console.WriteLine(File.ReadAllText("log.txt"));
+
+
+  
+    }
+        
 }
