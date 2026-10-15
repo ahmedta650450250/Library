@@ -1,0 +1,6 @@
+[10/01/2026 15:50:39] WARN: User fayez is not logged in
+[10/01/2026 15:51:24] WARN: User fayez is not logged in
+[10/01/2026 15:54:24] WARN: User fayez is not logged in
+[10/01/2026 15:54:25] WARN: user is not logged in
+[10/01/2026 19:28:37] INFO: User fayez borrowed book david wilson
+[10/01/2026 19:28:37] INFO: fayez returned david wilson, Fine: 0.00

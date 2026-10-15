@@ -1,0 +1,50 @@
+{
+  "Books": [
+    {
+      "Title": "DoNotQuit",
+      "Author": "ahmed",
+      "ISBN": "787436",
+      "TotalCopies": 3,
+      "AvailableCopies": 3
+    },
+    {
+      "Title": "Clean Code",
+      "Author": "David",
+      "ISBN": "566",
+      "TotalCopies": 3,
+      "AvailableCopies": 3
+    }
+  ],
+  "Users": [
+    {
+      "Id": null,
+      "Name": "firas",
+      "Type": 1,
+      "BorrowedBooks": [],
+      "IsVIP": false,
+      "MaxBorrowLimit": 3
+    },
+    {
+      "Id": null,
+      "Name": "eyad",
+      "Type": 1,
+      "BorrowedBooks": [],
+      "IsVIP": false,
+      "MaxBorrowLimit": 3
+    },
+    {
+      "Id": null,
+      "Name": "yamen",
+      "Type": 1,
+      "BorrowedBooks": [],
+      "IsVIP": false,
+      "MaxBorrowLimit": 3
+    }
+  ],
+  "Admins": [
+    {
+      "Name": "biden"
+    }
+  ],
+  "BlockedUsers": []
+}
